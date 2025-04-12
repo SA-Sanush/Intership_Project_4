@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      width: 350px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .balance {
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+    .transaction-list {
+      margin-bottom: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      padding: 10px;
+      border-left: 5px solid;
+    }
+    .transaction.income {
+      border-color: green;
+      background: #e6ffed;
+    }
+    .transaction.expense {
+      border-color: red;
+      background: #ffe6e6;
+    }
+    form input, form select {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    form button {
+      width: 100%;
+      padding: 10px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Expense Tracker</h2>
+    <div class="balance">Balance: $<span id="balance">0.00</span></div>
+    <div class="transaction-list" id="transaction-list"></div>
+    <form id="transaction-form">
+      <input type="text" id="description" placeholder="Description" required />
+      <input type="number" id="amount" placeholder="Amount" required />
+      <select id="type">
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+      <button type="submit">Add Transaction</button>
+    </form>
+  </div>
+
+  <script>
+    const balanceEl = document.getElementById("balance");
+    const transactionList = document.getElementById("transaction-list");
+    const form = document.getElementById("transaction-form");
+    const descriptionEl = document.getElementById("description");
+    const amountEl = document.getElementById("amount");
+    const typeEl = document.getElementById("type");
+
+    let transactions = [];
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const description = descriptionEl.value.trim();
+      const amount = parseFloat(amountEl.value);
+      const type = typeEl.value;
+
+      if (description === "" || isNaN(amount) || amount <= 0) return;
+
+      const transaction = {
+        id: Date.now(),
+        description,
+        amount,
+        type
+      };
+
+      transactions.push(transaction);
+      renderTransactions();
+      updateBalance();
+      form.reset();
+    });
+
+    function renderTransactions() {
+      transactionList.innerHTML = "";
+      transactions.forEach((t) => {
+        const div = document.createElement("div");
+        div.classList.add("transaction", t.type);
+        div.innerHTML = `
+          <span>${t.description}</span>
+          <span>${t.type === "income" ? "+" : "-"}$${t.amount.toFixed(2)}</span>
+        `;
+        transactionList.appendChild(div);
+      });
+    }
+
+    function updateBalance() {
+      let balance = 0;
+      transactions.forEach((t) => {
+        balance += t.type === "income" ? t.amount : -t.amount;
+      });
+      balanceEl.textContent = balance.toFixed(2);
+    }
+  </script>
+</body>
+</html>
