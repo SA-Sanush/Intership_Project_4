@@ -74,7 +74,7 @@
 <body>
   <div class="container">
     <h2>Expense Tracker</h2>
-    <div class="balance">Balance: $<span id="balance">0.00</span></div>
+    <div class="balance">Balance: ₹<span id="balance">0.00</span></div>
     <div class="transaction-list" id="transaction-list"></div>
     <form id="transaction-form">
       <input type="text" id="description" placeholder="Description" required />
@@ -125,7 +125,7 @@
         div.classList.add("transaction", t.type);
         div.innerHTML = `
           <span>${t.description}</span>
-          <span>${t.type === "income" ? "+" : "-"}$${t.amount.toFixed(2)}</span>
+          <span>${t.type === "income" ? "+" : "-"}₹${t.amount.toFixed(2)}</span>
         `;
         transactionList.appendChild(div);
       });
