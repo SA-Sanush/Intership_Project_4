@@ -1,2 +1,1 @@
-# Intership_Project_4
-Intership Project 4
+A responsive Expense Tracker web app built with HTML, CSS, and JavaScript — tracks income and expenses with live balance updates.
